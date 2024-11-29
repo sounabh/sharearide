@@ -49,10 +49,11 @@ The API expects a JSON object with the following fields:
 
 
 
-Status Code	Description
+    Status Code	Description
+
 400	Validation error. Missing or invalid fields.
 500	Internal server error.
 
 
 
-This `README.md` provides a detailed explanation of the `user/register` endpoint and covers all the required aspects in a single file. Let me know if you need further changes!
+This `README.md` provides a detailed explanation of the `user/register` endpoint 
