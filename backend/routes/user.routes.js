@@ -18,4 +18,17 @@ router.post("/register",[
 
 ],userController.RegisterUser)// <--controller
 
+
+
+//on login route
+router.post("/login",[
+
+
+    body('email').isEmail().withMessage("Invalid Email"),
+    body('password').isLength({min:6}).withMessage("password must be atleast 6 character long"),
+
+
+],userController.LoginUser)// <--controller
+
+
 module.exports = router

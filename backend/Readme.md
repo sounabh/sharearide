@@ -1,59 +1,109 @@
-# User Registration API Documentation
+# Backend API Documentation
 
-## Overview
+This API allows users to register and log in. It uses MongoDB for database management and includes robust validation for input data.
 
-This document provides detailed information about the `user/register` API endpoint, including its purpose, usage, required data, status codes, and examples.
+## Endpoints
 
----
+### 1. **User Registration**
+   - **Endpoint:** `/register`
+   - **Method:** `POST`
+   - **Description:** Registers a new user by storing their information in the database.
 
-## Endpoint: User Registration
-
-### **URL**
-`POST /user/register`
-
-### **Description**
-This endpoint registers a new user by validating input data, hashing the password, and storing the user information in the database. A JWT token is generated and returned along with the user's details upon successful registration.
-
----
-
-## Request Details
-
-### **Headers**
-| Key           | Value             | Required |
-|---------------|-------------------|----------|
-| `Content-Type` | `application/json` | Yes      |
-
-
-### **Request Body**
-The API expects a JSON object with the following fields:
-
-| Field                | Type   | Description                                     | Required |
-|----------------------|--------|-------------------------------------------------|----------|
-| `fullname.firstname` | String | First name of the user (minimum 3 characters). | Yes      |
-| `fullname.lastname`  | String | Last name of the user (minimum 3 characters).  | No       |
-| `email`              | String | Valid email address of the user.               | Yes      |
-| `password`           | String | Password of the user (minimum 6 characters).   | Yes      |
-
-
-
-**Example Request Body**:
+#### Request Body
 ```json
 {
   "fullname": {
     "firstname": "John",
     "lastname": "Doe"
   },
-  "email": "john.doe@example.com",
-  "password": "securepassword123"
+  "email": "johndoe@example.com",
+  "password": "password123"
+}
+
+
+Validations
+fullname.firstname: Must be at least 3 characters long.
+email: Must be a valid email address.
+password: Must be at least 6 characters long.
+
+
+ex
+{
+  "token": "jwt_token_here",
+  "user": {
+    "_id": "64fcb1a2e7df12345a6789bc",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "johndoe@example.com",
+    "createdAt": "2024-11-29T10:00:00.000Z",
+    "updatedAt": "2024-11-29T10:00:00.000Z"
+  }
+},
+{
+  "errors": [
+    {
+      "msg": "Firstname should have minimum 3 character long",
+      "param": "fullname.firstname",
+      "location": "body"
+    }
+  ]
 }
 
 
 
-    Status Code	Description
 
-400	Validation error. Missing or invalid fields.
-500	Internal server error.
+User Login
+
+Endpoint: /login
+Method: POST
+Description: Authenticates a user and generates a JWT token.
 
 
 
-This `README.md` provides a detailed explanation of the `user/register` endpoint 
+{
+  "email": "johndoe@example.com",
+  "password": "password123"
+}
+
+Validations
+
+Field	Rule	Error Message
+email	Must be a valid email address.	Invalid Email.
+password	Must be at least 6 characters long.	Password must be at least 6 characters long.
+
+
+{
+  "token": "jwt_token_here",
+  "userExist": {
+    "_id": "64fcb1a2e7df12345a6789bc",
+    "fullname": {
+      "firstname": "John",
+      "lastname": "Doe"
+    },
+    "email": "johndoe@example.com",
+    "createdAt": "2024-11-29T10:00:00.000Z",
+    "updatedAt": "2024-11-29T10:00:00.000Z"
+  }
+}
+
+{
+  "message": "Invalid Email" || "Invalid Password"
+}
+
+Status Code	Meaning
+201	Resource created successfully.
+200	Request processed successfully.
+400	Bad input validation errors.
+401	Unauthorized access.
+
+
+Notes
+Authentication: The API uses JWT for user authentication. Store the token securely after login.
+Database: MongoDB is used to store user details, including hashed passwords.
+Dependencies:
+express for routing.
+mongoose for database management.
+bcrypt for password hashing.
+jsonwebtoken for token generation.
